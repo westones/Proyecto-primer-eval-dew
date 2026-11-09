@@ -1,2 +1,19 @@
 # Documentación interna del repositorio (reglas y notas de trabajo)
 docs/
+
+# Dependencias y build
+node_modules
+dist
+dist-ssr
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Editores y sistema
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
