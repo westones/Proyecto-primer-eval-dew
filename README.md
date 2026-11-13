@@ -14,6 +14,19 @@ La app queda en `http://localhost:5173`.
 
 ## Estado
 
-Proyecto base, tema de Emotion, router con páginas de inicio, libros, socios, perfil y 404, y
-layout privado con navbar y sidebar. Las páginas todavía son placeholders: el login y la conexión
-con el backend vienen en los próximos commits.
+Proyecto base con Vite, React y TypeScript, tema de Emotion, router con páginas de inicio, libros,
+socios, perfil y 404, layout privado con navbar y sidebar, y login real contra la API con la sesión
+en la cookie httpOnly. Libros y socios todavía son páginas de ejemplo: la conexión de los listados
+viene en los próximos commits.
+
+## API
+
+El cliente HTTP apunta por defecto a `http://localhost:3000`. Para usar otra URL, definí
+`VITE_API_URL` en un archivo `.env` en la raíz del proyecto.
+
+## Usuario de prueba
+
+Con el backend levantado:
+
+- Correo: `alumno@biblioteca.local`
+- Contraseña: `Biblioteca2026`
