@@ -14,5 +14,6 @@ La app queda en `http://localhost:5173`.
 
 ## Estado
 
-Por ahora están el proyecto base, el tema de Emotion y una tarjeta de muestra para ver los
-estilos. Las páginas y la conexión con el backend vienen en los próximos commits.
+Proyecto base, tema de Emotion, router con páginas de inicio, libros, socios, perfil y 404, y
+layout privado con navbar y sidebar. Las páginas todavía son placeholders: el login y la conexión
+con el backend vienen en los próximos commits.
