@@ -22,8 +22,9 @@ export function RutaPrivada() {
   }
 
   if (!user) {
-    // Se guarda la ruta pedida para volver después del login
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />
+    // Se guarda la ruta pedida completa (con búsqueda y hash) para volver después del login
+    const from = `${location.pathname}${location.search}${location.hash}`
+    return <Navigate to="/login" replace state={{ from }} />
   }
 
   return <Outlet />
