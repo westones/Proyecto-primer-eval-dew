@@ -1,4 +1,8 @@
+import { useState, type FormEvent } from 'react'
 import styled from '@emotion/styled'
+import { useNavigate } from 'react-router-dom'
+import { Boton } from '../components/Boton'
+import { useAuth } from '../hooks/useAuth'
 
 const Pagina = styled.main`
   min-height: 100vh;
@@ -29,12 +33,102 @@ const Texto = styled.p`
   line-height: 1.6;
 `
 
+const Formulario = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.md};
+  margin-top: ${({ theme }) => theme.space.lg};
+`
+
+const Campo = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.xs};
+  color: ${({ theme }) => theme.colors.muted};
+  font-size: ${({ theme }) => theme.font.sizes.sm};
+`
+
+const Entrada = styled.input`
+  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+  font-family: inherit;
+  font-size: ${({ theme }) => theme.font.sizes.md};
+
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 1px;
+  }
+`
+
+const MensajeError = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.danger};
+  font-size: ${({ theme }) => theme.font.sizes.sm};
+`
+
 export function Login() {
+  const { login } = useAuth()
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [enviando, setEnviando] = useState(false)
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!email.trim() || !password) {
+      setError('Completá el correo y la contraseña')
+      return
+    }
+
+    setEnviando(true)
+    setError(null)
+
+    try {
+      await login(email.trim(), password)
+      navigate('/', { replace: true })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
   return (
     <Pagina>
       <Tarjeta>
         <Titulo>Iniciar sesión</Titulo>
-        <Texto>El acceso con correo y contraseña se conecta con el servidor en el próximo paso.</Texto>
+        <Texto>Entrá con el correo y la contraseña de tu cuenta.</Texto>
+        <Formulario onSubmit={handleSubmit}>
+          <Campo>
+            Correo
+            <Entrada
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
+              disabled={enviando}
+            />
+          </Campo>
+          <Campo>
+            Contraseña
+            <Entrada
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              disabled={enviando}
+            />
+          </Campo>
+          {error && <MensajeError role="alert">{error}</MensajeError>}
+          <Boton type="submit" disabled={enviando}>
+            {enviando ? 'Entrando...' : 'Entrar'}
+          </Boton>
+        </Formulario>
       </Tarjeta>
     </Pagina>
   )

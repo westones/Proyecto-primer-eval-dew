@@ -11,7 +11,12 @@ export const Boton = styled.button`
   cursor: pointer;
   transition: background 0.15s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.primaryDark};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
   }
 `
