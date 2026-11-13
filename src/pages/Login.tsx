@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import styled from '@emotion/styled'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Boton } from '../components/Boton'
 import { useAuth } from '../hooks/useAuth'
 
@@ -70,12 +70,16 @@ const MensajeError = styled.p`
 `
 
 export function Login() {
-  const { login } = useAuth()
+  const { user, login } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
+
+  // Ruta que el usuario quiso abrir antes de que lo mandaran al login
+  const destino = (location.state as { from?: string } | null)?.from ?? '/'
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -90,12 +94,17 @@ export function Login() {
 
     try {
       await login(email.trim(), password)
-      navigate('/', { replace: true })
+      navigate(destino, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión')
     } finally {
       setEnviando(false)
     }
+  }
+
+  // Si ya hay sesión, el formulario no tiene nada que hacer
+  if (user) {
+    return <Navigate to={destino} replace />
   }
 
   return (
