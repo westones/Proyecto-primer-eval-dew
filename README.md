@@ -17,8 +17,10 @@ La app queda en `http://localhost:5173`.
 Proyecto base con Vite, React y TypeScript, tema de Emotion, router con páginas de inicio, libros,
 socios, perfil y 404, layout privado con navbar y sidebar, login real contra la API con la sesión
 en la cookie httpOnly, rutas privadas con redirección al login y cierre de sesión desde la navbar.
-Libros y socios todavía son páginas de ejemplo: la conexión de los listados viene en los próximos
-commits.
+
+El perfil muestra los datos que devuelve `/api/auth/profile`, con avatar de iniciales. La navbar
+lleva logo, avatar y salida; el sidebar agrupa el menú y marca la sección activa. Libros y socios
+todavía son páginas de ejemplo: la conexión de los listados viene en los próximos commits.
 
 ## API
 
