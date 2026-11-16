@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { Avatar } from './Avatar'
 
 const Barra = styled.header`
   display: flex;
@@ -13,11 +14,30 @@ const Barra = styled.header`
 `
 
 const Marca = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+  color: ${({ theme }) => theme.colors.text};
+  text-decoration: none;
+`
+
+const Logo = styled.span`
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: ${({ theme }) => theme.radius.sm};
+  background: ${({ theme }) => theme.colors.primaryDark};
+  color: ${({ theme }) => theme.colors.surface};
+  font-family: ${({ theme }) => theme.font.heading};
+  font-size: ${({ theme }) => theme.font.sizes.lg};
+  line-height: 1;
+`
+
+const NombreMarca = styled.span`
   font-family: ${({ theme }) => theme.font.heading};
   font-size: ${({ theme }) => theme.font.sizes.lg};
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.text};
-  text-decoration: none;
 `
 
 const Acciones = styled.div`
@@ -26,19 +46,23 @@ const Acciones = styled.div`
   gap: ${({ theme }) => theme.space.md};
 `
 
-const EnlacePerfil = styled(Link)`
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: ${({ theme }) => theme.font.sizes.sm};
+const Usuario = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.space.sm};
+  padding: ${({ theme }) => `${theme.space.xs} ${theme.space.sm}`};
+  border-radius: ${({ theme }) => theme.radius.sm};
+  color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme }) => theme.colors.bg};
   }
 `
 
-const Saludar = styled.span`
-  color: ${({ theme }) => theme.colors.muted};
+const NombreUsuario = styled.span`
   font-size: ${({ theme }) => theme.font.sizes.sm};
+  font-weight: 500;
 `
 
 const Salir = styled.button`
@@ -68,10 +92,17 @@ export function Navbar() {
 
   return (
     <Barra>
-      <Marca to="/">Biblioteca</Marca>
+      <Marca to="/">
+        <Logo aria-hidden="true">B</Logo>
+        <NombreMarca>Biblioteca</NombreMarca>
+      </Marca>
       <Acciones>
-        {user && <Saludar>{user.username}</Saludar>}
-        <EnlacePerfil to="/perfil">Perfil</EnlacePerfil>
+        {user && (
+          <Usuario to="/perfil" title="Ver perfil">
+            <Avatar nombre={user.username} tamano="sm" />
+            <NombreUsuario>{user.username}</NombreUsuario>
+          </Usuario>
+        )}
         <Salir type="button" onClick={handleLogout}>
           Salir
         </Salir>
