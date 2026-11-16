@@ -20,8 +20,9 @@ en la cookie httpOnly, rutas privadas con redirección al login y cierre de sesi
 
 El perfil muestra los datos que devuelve `/api/auth/profile`, con avatar de iniciales. La navbar
 lleva logo, avatar y salida; el sidebar agrupa el menú y marca la sección activa. El listado de
-libros ya se pide a `GET /libros` con el hook `useGet` y muestra carga y error. Socios todavía es
-una página de ejemplo: su listado viene en los próximos commits.
+libros ya se pide a `GET /libros` con el hook `useGet`: muestra contador sobre el total, estados de
+carga y error, y un mensaje cuando no hay libros. Socios todavía es una página de ejemplo: su
+listado viene en los próximos commits.
 
 ## API
 
