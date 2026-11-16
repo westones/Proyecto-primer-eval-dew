@@ -9,6 +9,30 @@ const Texto = styled.p`
   line-height: 1.6;
 `
 
+const Cabecera = styled.div`
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.space.md};
+  margin-bottom: ${({ theme }) => theme.space.md};
+`
+
+const Contador = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.muted};
+  font-size: ${({ theme }) => theme.font.sizes.sm};
+`
+
+const Vacio = styled.p`
+  margin: 0;
+  padding: ${({ theme }) => `${theme.space.xl} ${theme.space.md}`};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px dashed ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radius.md};
+  color: ${({ theme }) => theme.colors.muted};
+  text-align: center;
+`
+
 const Aviso = styled.p`
   margin: 0;
   padding: ${({ theme }) => theme.space.md};
@@ -57,15 +81,27 @@ const Disponible = styled.span<{ $si: boolean }>`
 export function Libros() {
   const { data, loading, error } = useGet<Listado<Libro>>('/libros')
   const libros = data?.data ?? []
+  const total = data?.meta.total ?? 0
 
   return (
     <section>
-      <TituloPagina>Libros</TituloPagina>
+      <Cabecera>
+        <TituloPagina>Libros</TituloPagina>
+        {!loading && !error && libros.length > 0 && (
+          <Contador>
+            Mostrando {libros.length} de {total} {total === 1 ? 'libro' : 'libros'}
+          </Contador>
+        )}
+      </Cabecera>
 
       {loading && <Texto>Cargando libros…</Texto>}
       {error && <Aviso>No se pudieron cargar los libros: {error}</Aviso>}
 
-      {!loading && !error && (
+      {!loading && !error && libros.length === 0 && (
+        <Vacio>No hay libros cargados todavía.</Vacio>
+      )}
+
+      {!loading && !error && libros.length > 0 && (
         <Tabla>
           <thead>
             <tr>
