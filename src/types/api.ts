@@ -12,6 +12,29 @@ export interface Libro {
   updatedAt: string
 }
 
+// Lo que manda el formulario cuando se crea o se modifica un libro
+export interface DatosLibro {
+  titulo: string
+  autor: string
+  isbn?: string
+  genero?: string
+  anioPublicacion?: number
+  paginas?: number
+  disponible: boolean
+}
+
+// Los mismos géneros que valida el backend
+export const GENEROS = [
+  'novela',
+  'ensayo',
+  'poesía',
+  'teatro',
+  'infantil',
+  'ciencia ficción',
+  'fantasía',
+  'historia',
+]
+
 export interface Socio {
   _id: string
   nombre: string
@@ -34,6 +57,12 @@ export interface Usuario {
   activo: boolean
   createdAt: string
   updatedAt: string
+}
+
+// Forma en que el backend cuenta lo que falló
+export interface ErrorApi {
+  msg?: string
+  errors?: { campo: string; mensaje: string }[]
 }
 
 export interface Paginacion {
