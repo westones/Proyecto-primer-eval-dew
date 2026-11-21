@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom'
 import { LayoutPrivado } from './components/LayoutPrivado'
 import { RutaPrivada } from './components/RutaPrivada'
 import { Inicio } from './pages/Inicio'
+import { LibroEditar } from './pages/LibroEditar'
+import { LibroNuevo } from './pages/LibroNuevo'
 import { Libros } from './pages/Libros'
 import { Login } from './pages/Login'
 import { NotFound } from './pages/NotFound'
@@ -16,6 +18,8 @@ function App() {
         <Route element={<LayoutPrivado />}>
           <Route index element={<Inicio />} />
           <Route path="libros" element={<Libros />} />
+          <Route path="libros/nuevo" element={<LibroNuevo />} />
+          <Route path="libros/:id/editar" element={<LibroEditar />} />
           <Route path="socios" element={<Socios />} />
           <Route path="perfil" element={<Perfil />} />
         </Route>
