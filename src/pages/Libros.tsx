@@ -1,75 +1,27 @@
 import styled from '@emotion/styled'
+import { useState } from 'react'
+import { AccionesLibro } from '../components/AccionesLibro'
+import { Aviso } from '../components/Aviso'
+import { EnlaceBoton } from '../components/EnlaceBoton'
+import { Tabla, Td, Th } from '../components/Tabla'
+import { Texto } from '../components/Texto'
 import { TituloPagina } from '../components/TituloPagina'
+import { Vacio } from '../components/Vacio'
 import { useGet } from '../hooks/useGet'
+import { eliminarLibro } from '../services/libros'
 import type { Libro, Listado } from '../types/api'
-
-const Texto = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.muted};
-  line-height: 1.6;
-`
 
 const Cabecera = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: ${({ theme }) => theme.space.md};
-  margin-bottom: ${({ theme }) => theme.space.md};
 `
 
 const Contador = styled.p`
   margin: 0;
   color: ${({ theme }) => theme.colors.muted};
   font-size: ${({ theme }) => theme.font.sizes.sm};
-`
-
-const Vacio = styled.p`
-  margin: 0;
-  padding: ${({ theme }) => `${theme.space.xl} ${theme.space.md}`};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px dashed ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-  color: ${({ theme }) => theme.colors.muted};
-  text-align: center;
-`
-
-const Aviso = styled.p`
-  margin: 0;
-  padding: ${({ theme }) => theme.space.md};
-  border: 1px solid ${({ theme }) => theme.colors.danger};
-  border-radius: ${({ theme }) => theme.radius.sm};
-  color: ${({ theme }) => theme.colors.danger};
-`
-
-const Tabla = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  overflow: hidden;
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-`
-
-const Th = styled.th`
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-  background: ${({ theme }) => theme.colors.bg};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: ${({ theme }) => theme.font.sizes.sm};
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-align: left;
-  text-transform: uppercase;
-`
-
-const Td = styled.td`
-  padding: ${({ theme }) => `${theme.space.sm} ${theme.space.md}`};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  font-size: ${({ theme }) => theme.font.sizes.md};
-
-  tr:last-child & {
-    border-bottom: none;
-  }
 `
 
 const Disponible = styled.span<{ $si: boolean }>`
@@ -79,23 +31,46 @@ const Disponible = styled.span<{ $si: boolean }>`
 `
 
 export function Libros() {
-  const { data, loading, error } = useGet<Listado<Libro>>('/libros')
+  const { data, loading, error, recargar } = useGet<Listado<Libro>>('/libros')
+  const [borrando, setBorrando] = useState<string | null>(null)
+  const [errorBorrado, setErrorBorrado] = useState<string | null>(null)
   const libros = data?.data ?? []
   const total = data?.meta.total ?? 0
+
+  const handleEliminar = async (libro: Libro) => {
+    // Borrar no se deshace, así que se pregunta antes
+    if (!window.confirm(`¿Eliminar «${libro.titulo}»?`)) return
+
+    setBorrando(libro._id)
+    setErrorBorrado(null)
+
+    try {
+      await eliminarLibro(libro._id)
+      recargar()
+    } catch (err) {
+      setErrorBorrado(err instanceof Error ? err.message : 'No se pudo eliminar el libro')
+    } finally {
+      setBorrando(null)
+    }
+  }
 
   return (
     <section>
       <Cabecera>
-        <TituloPagina>Libros</TituloPagina>
-        {!loading && !error && libros.length > 0 && (
-          <Contador>
-            Mostrando {libros.length} de {total} {total === 1 ? 'libro' : 'libros'}
-          </Contador>
-        )}
+        <div>
+          <TituloPagina>Libros</TituloPagina>
+          {!loading && !error && libros.length > 0 && (
+            <Contador>
+              Mostrando {libros.length} de {total} {total === 1 ? 'libro' : 'libros'}
+            </Contador>
+          )}
+        </div>
+        <EnlaceBoton to="/libros/nuevo">Nuevo libro</EnlaceBoton>
       </Cabecera>
 
       {loading && <Texto>Cargando libros…</Texto>}
       {error && <Aviso>No se pudieron cargar los libros: {error}</Aviso>}
+      {errorBorrado && <Aviso role="alert">{errorBorrado}</Aviso>}
 
       {!loading && !error && libros.length === 0 && (
         <Vacio>No hay libros cargados todavía.</Vacio>
@@ -109,6 +84,7 @@ export function Libros() {
               <Th>Autor</Th>
               <Th>Año</Th>
               <Th>Disponible</Th>
+              <Th>Acciones</Th>
             </tr>
           </thead>
           <tbody>
@@ -121,6 +97,13 @@ export function Libros() {
                   <Disponible $si={libro.disponible}>
                     {libro.disponible ? 'Sí' : 'No'}
                   </Disponible>
+                </Td>
+                <Td>
+                  <AccionesLibro
+                    libro={libro}
+                    borrando={borrando === libro._id}
+                    onEliminar={handleEliminar}
+                  />
                 </Td>
               </tr>
             ))}
