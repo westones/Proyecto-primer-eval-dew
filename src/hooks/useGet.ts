@@ -7,6 +7,7 @@ export function useGet<T>(path: string) {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [intento, setIntento] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -30,7 +31,10 @@ export function useGet<T>(path: string) {
       })
 
     return () => controller.abort()
-  }, [path])
+  }, [path, intento])
 
-  return { data, loading, error }
+  // Subir el contador obliga a repetir la petición (sirve después de borrar)
+  const recargar = () => setIntento((previo) => previo + 1)
+
+  return { data, loading, error, recargar }
 }
