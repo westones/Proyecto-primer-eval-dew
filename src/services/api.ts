@@ -1,3 +1,5 @@
+import type { ErrorApi } from '../types/api'
+
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 export class ApiError extends Error {
@@ -25,7 +27,14 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   const data = res.status === 204 ? null : await res.json().catch(() => null)
 
   if (!res.ok) {
-    throw new ApiError(res.status, data?.msg ?? 'No se pudo conectar con el servidor')
+    const fallo = data as ErrorApi | null
+    // Cuando hay errores por campo, su mensaje se entiende mejor que el "msg" general
+    const detalle = fallo?.errors?.map((error) => error.mensaje).join(' ')
+
+    throw new ApiError(
+      res.status,
+      detalle || fallo?.msg || 'No se pudo conectar con el servidor',
+    )
   }
 
   return data as T
