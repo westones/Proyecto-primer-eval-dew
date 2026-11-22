@@ -1,8 +1,9 @@
-import styled from '@emotion/styled'
 import { useState } from 'react'
 import { AccionesLibro } from '../components/AccionesLibro'
 import { Aviso } from '../components/Aviso'
+import { Cabecera, Contador } from '../components/CabeceraListado'
 import { EnlaceBoton } from '../components/EnlaceBoton'
+import { Estado } from '../components/Estado'
 import { Tabla, Td, Th } from '../components/Tabla'
 import { Texto } from '../components/Texto'
 import { TituloPagina } from '../components/TituloPagina'
@@ -10,25 +11,6 @@ import { Vacio } from '../components/Vacio'
 import { useGet } from '../hooks/useGet'
 import { eliminarLibro } from '../services/libros'
 import type { Libro, Listado } from '../types/api'
-
-const Cabecera = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.space.md};
-`
-
-const Contador = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: ${({ theme }) => theme.font.sizes.sm};
-`
-
-const Disponible = styled.span<{ $si: boolean }>`
-  color: ${({ theme, $si }) => ($si ? theme.colors.primary : theme.colors.muted)};
-  font-size: ${({ theme }) => theme.font.sizes.sm};
-  font-weight: 600;
-`
 
 export function Libros() {
   const { data, loading, error, recargar } = useGet<Listado<Libro>>('/libros')
@@ -94,9 +76,9 @@ export function Libros() {
                 <Td>{libro.autor}</Td>
                 <Td>{libro.anioPublicacion ?? '—'}</Td>
                 <Td>
-                  <Disponible $si={libro.disponible}>
+                  <Estado $si={libro.disponible}>
                     {libro.disponible ? 'Sí' : 'No'}
-                  </Disponible>
+                  </Estado>
                 </Td>
                 <Td>
                   <AccionesLibro
