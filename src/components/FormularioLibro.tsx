@@ -1,30 +1,11 @@
 import { useState, type FormEvent } from 'react'
-import styled from '@emotion/styled'
 import { Aviso } from './Aviso'
 import { Boton } from './Boton'
 import { Campo } from './Campo'
+import { Casilla } from './Casilla'
 import { Fila } from './Fila'
+import { Formulario } from './Formulario'
 import { GENEROS, type DatosLibro, type Libro } from '../types/api'
-
-const Formulario = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.space.md};
-  max-width: 520px;
-  margin-top: ${({ theme }) => theme.space.md};
-  padding: ${({ theme }) => theme.space.lg};
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radius.md};
-`
-
-const Disponible = styled.label`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.space.sm};
-  color: ${({ theme }) => theme.colors.muted};
-  font-size: ${({ theme }) => theme.font.sizes.sm};
-`
 
 type Props = {
   inicial?: Libro
@@ -124,7 +105,7 @@ export function FormularioLibro({ inicial, enviando, error, textoBoton, onGuarda
           disabled={enviando}
         />
       </Fila>
-      <Disponible>
+      <Casilla>
         <input
           type="checkbox"
           checked={campos.disponible}
@@ -132,7 +113,7 @@ export function FormularioLibro({ inicial, enviando, error, textoBoton, onGuarda
           disabled={enviando}
         />
         Disponible para prestar
-      </Disponible>
+      </Casilla>
       {(errorLocal || error) && <Aviso role="alert">{errorLocal ?? error}</Aviso>}
       <Boton type="submit" disabled={enviando}>
         {enviando ? 'Guardando...' : textoBoton}
