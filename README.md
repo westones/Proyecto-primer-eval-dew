@@ -19,10 +19,11 @@ socios, perfil y 404, layout privado con navbar y sidebar, login real contra la 
 en la cookie httpOnly, rutas privadas con redirección al login y cierre de sesión desde la navbar.
 
 El perfil muestra los datos que devuelve `/api/auth/profile`, con avatar de iniciales. La navbar
-lleva logo, avatar y salida; el sidebar agrupa el menú y marca la sección activa. El listado de
-libros ya se pide a `GET /libros` con el hook `useGet`: muestra contador sobre el total, estados de
-carga y error, y un mensaje cuando no hay libros. Socios todavía es una página de ejemplo: su
-listado viene en los próximos commits.
+lleva logo, avatar y salida; el sidebar agrupa el menú y marca la sección activa. Libros y socios
+se piden a la API con el hook `useGet`: cada listado muestra el contador sobre el total, los
+estados de carga y error, y un mensaje cuando no hay datos. Los dos recursos ya tienen su alta
+(`/libros/nuevo` y `/socios/nuevo`) con formularios que comparten los mismos campos; en libros
+también está la edición. Las acciones de editar y eliminar de socio llegan en los próximos commits.
 
 ## API
 
