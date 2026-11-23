@@ -35,6 +35,8 @@ export const GENEROS = [
   'historia',
 ]
 
+export type TipoSocio = 'estudiante' | 'profesor' | 'general'
+
 export interface Socio {
   _id: string
   nombre: string
@@ -42,12 +44,26 @@ export interface Socio {
   email: string
   telefono?: string
   fechaNacimiento?: string
-  tipo: 'estudiante' | 'profesor' | 'general'
+  tipo: TipoSocio
   activo: boolean
   codigoSocio?: string
   createdAt: string
   updatedAt: string
 }
+
+// Lo que manda el formulario cuando se crea o se modifica un socio
+export interface DatosSocio {
+  nombre: string
+  apellidos?: string
+  email: string
+  telefono?: string
+  fechaNacimiento?: string
+  tipo: TipoSocio
+  activo: boolean
+}
+
+// Los mismos tipos que valida el backend
+export const TIPOS_SOCIO = ['estudiante', 'profesor', 'general']
 
 export interface Usuario {
   _id: string
