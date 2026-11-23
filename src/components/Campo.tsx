@@ -42,7 +42,7 @@ type Props = {
   etiqueta: string
   valor: string
   onChange: (valor: string) => void
-  type?: 'text' | 'number'
+  type?: 'text' | 'number' | 'date' | 'email' | 'tel'
   placeholder?: string
   opciones?: string[]
   disabled?: boolean
