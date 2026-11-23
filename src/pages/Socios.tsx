@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { Aviso } from '../components/Aviso'
 import { Cabecera, Contador } from '../components/CabeceraListado'
+import { EnlaceBoton } from '../components/EnlaceBoton'
 import { Estado } from '../components/Estado'
 import { Tabla, Td, Th } from '../components/Tabla'
 import { Texto } from '../components/Texto'
@@ -30,6 +31,7 @@ export function Socios() {
             </Contador>
           )}
         </div>
+        <EnlaceBoton to="/socios/nuevo">Nuevo socio</EnlaceBoton>
       </Cabecera>
 
       {loading && <Texto>Cargando socios…</Texto>}
