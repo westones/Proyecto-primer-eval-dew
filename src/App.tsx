@@ -8,6 +8,7 @@ import { Libros } from './pages/Libros'
 import { Login } from './pages/Login'
 import { NotFound } from './pages/NotFound'
 import { Perfil } from './pages/Perfil'
+import { SocioNuevo } from './pages/SocioNuevo'
 import { Socios } from './pages/Socios'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="libros/nuevo" element={<LibroNuevo />} />
           <Route path="libros/:id/editar" element={<LibroEditar />} />
           <Route path="socios" element={<Socios />} />
+          <Route path="socios/nuevo" element={<SocioNuevo />} />
           <Route path="perfil" element={<Perfil />} />
         </Route>
       </Route>
